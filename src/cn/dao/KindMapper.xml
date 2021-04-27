@@ -6,10 +6,11 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="kindname" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="isexamine" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="userid" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, kindname, isexamine
+    id, kindname, isexamine,userid
   </sql>
   
   <select id="getAllKindList" resultMap="BaseResultMap">
@@ -18,8 +19,13 @@
     from kind
    order by id desc
   </select>
-  
-  
+  <select id="getAllKindListByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+    <include refid="Base_Column_List" />
+    from kind
+    where userid = #{userId,jdbcType=INTEGER}
+   order by id desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -31,9 +37,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.entity.Kind">
-    insert into kind (id, kindname, isexamine
+    insert into kind (id, kindname, isexamine,userid
       )
-    values (#{id,jdbcType=INTEGER}, #{kindname,jdbcType=VARCHAR}, #{isexamine,jdbcType=INTEGER}
+    values (#{id,jdbcType=INTEGER}, #{kindname,jdbcType=VARCHAR}, #{isexamine,jdbcType=INTEGER},#{userid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.entity.Kind">

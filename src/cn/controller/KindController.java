@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 
 import cn.entity.Kind;
@@ -32,18 +33,21 @@ public class KindController {
 	private RecordService recordService;
 	
 	@RequestMapping("getKindlist")
-	public String getAllKind(Integer pageNum,Model model){
+	public String getAllKind(Integer pageNum,Model model,HttpSession session){
 			if (pageNum == null) {
 				pageNum = 1;
 			}
-			PageInfo<Kind> pageInfo =kindServices.getAllKindList(pageNum);
-			model.addAttribute("pageInfo", pageInfo);
+	        User user = (User) session.getAttribute("userSession");
+            PageInfo<Kind> pageInfo =kindServices.getAllKindList(pageNum,user.getId());
+	            model.addAttribute("pageInfo", pageInfo);
 		return "kind";
 	}
 	@RequestMapping("addKind")
-	public String addkind(Kind kind){
-		kindServices.insert(kind);
-		return "redirect:/kind/getKindlist";
+	public String addkind(Kind kind,HttpSession session){
+	    User user = (User) session.getAttribute("userSession");
+        kind.setUserid(user.getId());
+        kindServices.insert(kind);
+        return "redirect:/kind/getKindlist";
 	}
 	
 	@RequestMapping("delKind")

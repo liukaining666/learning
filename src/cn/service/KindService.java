@@ -23,7 +23,7 @@ public interface KindService {
 
 	    int updateByPrimaryKey(Kind record);
 	    
-	    PageInfo<Kind> getAllKindList(Integer pageNum);
+	    PageInfo<Kind> getAllKindList(Integer pageNum,Integer userid);
 	    
 	    List<Kind> getAll();
 }

@@ -22,10 +22,10 @@ public class KindServiceImpl implements KindService{
 		return kindMapper.deleteByPrimaryKey(id);
 	}
 
-	public PageInfo<Kind> getAllKindList(Integer pageNum) {
+	public PageInfo<Kind> getAllKindList(Integer pageNum,Integer userId) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(pageNum, 5);
-		List<Kind> userlist=kindMapper.getAllKindList();
+		List<Kind> userlist=kindMapper.getAllKindListByUserId(userId);
 		PageInfo<Kind> pageInfo=new PageInfo<Kind>(userlist);
 		return pageInfo;
 	}

@@ -18,4 +18,6 @@ public interface KindMapper {
     int updateByPrimaryKey(Kind record);
     
     List<Kind> getAllKindList();
+    
+    List<Kind> getAllKindListByUserId(Integer userId);
 }

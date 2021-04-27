@@ -31,4 +31,8 @@ public interface UserService {
     PageInfo<User> getTeacherList(@Param("username") String username,Integer pageNum);
     //我的关注
     PageInfo<User> getLoverUserList(@Param("username") String username,Integer pageNum);
+    
+    PageInfo<User> getUserListByUserIds(String userIds,Integer pageNum);
+    //通过老师的id找到老师的课程  再找到该课程下的学生
+    PageInfo<User> getUserListByTeacherid(@Param("teacherId")Integer teacherId,Integer pageNum);
 }

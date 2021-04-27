@@ -80,4 +80,18 @@ public class UserServiceImpl implements UserService{
 		return userMapper.selectByUserName(username);
 	}
 
+    @Override
+    public PageInfo<User> getUserListByUserIds(String userIds, Integer pageNum) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public PageInfo<User> getUserListByTeacherid(Integer teacherId,Integer pageNum) {
+        PageHelper.startPage(pageNum, 5);
+        List<User> userlist=userMapper.getUserListByTeacherid(teacherId);
+        PageInfo<User> pageInfo=new PageInfo<User>(userlist);
+        return pageInfo;
+    }
+
 }

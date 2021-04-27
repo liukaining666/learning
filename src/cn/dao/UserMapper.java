@@ -28,4 +28,6 @@ public interface UserMapper {
     List<User> getTeacherList(@Param("username") String username);
     //我的关注
     List<User> getLoverUserList(@Param("username") String username);
+    
+    List<User> getUserListByTeacherid(@Param("teacherId")Integer teacherId);
 }

@@ -2,6 +2,7 @@ package cn.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 
+import cn.entity.Kind;
 import cn.entity.Message;
 import cn.entity.News;
 import cn.entity.Record;
 import cn.entity.User;
+import cn.service.KindService;
 import cn.service.MessageService;
 import cn.service.NewsService;
 import cn.service.RecordService;
@@ -40,6 +44,8 @@ public class UserController {
 	private MessageService messageService;
 	@Autowired
 	private NewsService newsService;
+	@Autowired
+    private KindService kindService;
 	
 	@RequestMapping("getUserlist")//查询学生
 	public String getUserlist(String username, Integer pageNum,
@@ -54,7 +60,20 @@ public class UserController {
 		return "user";
 	}
 	
-	
+	@RequestMapping("getTeacherDeskStudents")//查询选了当前登陆老师的课程的学生
+	@ResponseBody
+    public PageInfo<User> getTeacherDeskStudents(Integer pageNum,
+            Model model,HttpSession session) {
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        //获取当前登陆的老师的id
+        User user = (User) session.getAttribute("userSession");
+        Integer teacherId = user.getId();
+        //Integer teacherId = teacherId = 4;
+        PageInfo<User> pageInfo = userService.getUserListByTeacherid(teacherId,pageNum);
+        return pageInfo;
+    }
 	@RequestMapping("getTeacherlist")//查询老师
 	public String getTeacherlist(String username, Integer pageNum,
 			Model model) {

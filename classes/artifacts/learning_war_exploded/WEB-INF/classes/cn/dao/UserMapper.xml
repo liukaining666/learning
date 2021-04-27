@@ -24,7 +24,16 @@
     from user
     where username = #{username,jdbcType=VARCHAR}
   </select>
-  
+  <select id="getUserListByTeacherid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   SELECT u.* FROM user u ,kind k ,record r where k.id = r.nid and r.uid = u.id and 
+   k.userid = #{teacherId,jdbcType=INTEGER}
+  </select>
+  <select id="getUserListByUserIds" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id in (#{username,jdbcType=VARCHAR})
+  </select>
   <select id="getLoverUserList" resultMap="BaseResultMap">
     select  *  from record where 1=1
     <if test="username!=null and username!=''">
@@ -53,8 +62,8 @@
   	</if>
  	order by id desc
   </select>
-  
-  
+
+
   <select id="login" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

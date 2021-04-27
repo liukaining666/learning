@@ -22,6 +22,7 @@
     <!-- Google Fonts-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
     <link rel="stylesheet" href="<%=Const.ROOT %>assets/js/Lightweight-Chart/cssCharts.css">
+    <link rel="stylesheet" href="/learning/js/layui/css/layui.css"  media="all">
 </head>
 <body>
 <div id="wrapper">
@@ -49,6 +50,8 @@
                         </div>
                     </div>
                 </div>
+                <div id="demo1"></div>
+
                 <!--修改 -->
                 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                      aria-hidden="true">
@@ -89,12 +92,35 @@
 
                 <!-- Metis Menu Js -->
                 <script src="<%=Const.ROOT %>assets/js/jquery.metisMenu.js"></script>
+                <script src="/learning/js/layui/layui.js"></script>
                 <script src="/learning/js/studentList.js"></script>
 
 
 </body>
 <script type="text/javascript">
+
     $(function () {
+        layui.use(['laypage', 'layer'], function() {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+
+            //总页数低于页码总数
+            laypage.render({
+                elem: 'demo1'
+                , count: 50 //数据总数
+                ,jump:function (obj) {
+                    console.log(obj);
+                }
+            });
+        })
+        $.ajax({
+            url:'/learning/user/getTeacherDeskStudents',
+            type:'POST',
+            data:{"pageNum":1},
+            success:function (data) {
+
+            }
+        })
         var html = "<table class='table'>";
         html += '<tr><th>#</th><th>学生姓名</th><th>编辑</th></tr>'
         html += '<tr><td>1</td><td>京津冀</td><td><a class="waves-effect waves-light btn" data-toggle="modal" data-target="#updateModal">修改</a></td></tr>'

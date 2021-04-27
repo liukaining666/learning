@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dao.RecordMapper">
+  <resultMap id="BaseResultMap" type="cn.entity.Record" autoMapping="true">
+    <id property="id" column="id" javaType="java.lang.Integer"/>
+    <collection property="hSet" ofType="cn.entity.Hufu" javaType="java.util.Set" column="id"  select="selectHuifu"></collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, time, uid, nid, content, role
+  </sql>
+  
+  
+   <select id="getshenhe" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select r.*,k.kindname as kindname,u.username as username
+   
+    from record r,kind k,user u
+    where  r.nid=k.id and r.uid=u.id and r.role=7
+   
+  	order by r.id desc
+  </select>
+  
+  <select id="getMyjihua" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select r.*,k.kindname as kindname
+   
+    from record r,kind k 
+    where  r.nid=k.id
+    <if test="uid!=null and uid!=0">
+  		and r.uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  
+  	order by r.id desc
+  </select>
+  
+  <select id="selectHuifu" resultType="cn.entity.Hufu">
+  select h.*,u.username as username from hufu h,user u where u.id=h.uid and  h.rid=#{id} 
+  </select>
+  
+   <select id="getpinglunList" resultMap="BaseResultMap">
+    select r.*,u.username as username
+    
+    from record r,user u 
+    where r.role=3 and r.uid=u.id
+  	<if test="nid!=null and nid!=0">
+  		and r.nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+   <select id="getpinglunListT" resultMap="BaseResultMap">
+    select r.*,u.username as username
+    
+    from record r,user u 
+    where r.role=6 and r.uid=u.id
+  	<if test="nid!=null and nid!=0">
+  		and r.nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  
+  <select id="getMyGuanZhu" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select r.*,u.username as username
+   
+    from record r,user u
+    where r.role=4 and r.nid=u.id 
+    <if test="uid!=null and uid!=0">
+  		and r.uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  
+  	order by r.id desc
+  </select>
+  
+   <select id="shifoushoucang" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where role=1
+    <if test="uid!=null and uid!=0">
+  		and uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  	<if test="nid!=null and nid!=0">
+  		and nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+   <select id="shifouguanzhu" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where role=4
+    <if test="uid!=null and uid!=0">
+  		and uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  	<if test="nid!=null and nid!=0">
+  		and nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+   <select id="getMySeeRecordListed" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    r.*,v.voidname as nname,k.kindname as kindname 
+   
+    from record r,void v,kind k
+    where r.role=2 and r.nid=v.id and v.kindid=k.id
+   
+    
+    <if test="uid!=null and uid!=0">
+  		and r.uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <select id="getMyLoveRecordList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select r.*,v.voidname as nname,k.kindname as kindname 
+   
+    from record r,void v,kind k
+    where r.role=1 and r.nid=v.id and v.kindid=k.id
+    <if test="uid!=null and uid!=0">
+  		and r.uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  
+  	
+  	order by id desc
+  </select>
+  
+   <select id="getMybijiList" resultMap="BaseResultMap">
+    select r.*,v.voidname as nname,k.kindname as kindname 
+   
+    from record r,void v,kind k
+    where r.role=5 and r.nid=v.id and v.kindid=k.id
+    <if test="uid!=null and uid!=0">
+  		and r.uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  	<if test="nid!=null and nid!=0">
+  		and r.nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  	<if test="voidname!=null and voidname!=''">
+  		and v.voidname like '%${voidname}%'
+  	</if>
+  	order by id desc
+  </select>
+  
+  <select id="getMyRecordList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where role=3
+    <if test="uid!=null and uid!=0">
+  		and uid = #{uid,jdbcType=INTEGER}
+  	</if>
+  	<if test="nid!=null and nid!=0">
+  		and nid = #{nid,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  
+  <select id="getAllRecordList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where role=3
+    <if test="username!=null and username!=''">
+  		and username like '%${username}%'
+  	</if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.entity.Record">
+    insert into record (id, time, uid, 
+      nid, content, role)
+    values (#{id,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, 
+      #{nid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.entity.Record">
+    insert into record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="nid != null">
+        nid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="role != null">
+        role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="nid != null">
+        #{nid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.entity.Record">
+    update record
+    <set>
+      <if test="time != null">
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="nid != null">
+        nid = #{nid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        role = #{role,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.entity.Record">
+    update record
+    set time = #{time,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER},
+      nid = #{nid,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

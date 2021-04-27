@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dao.NewsMapper">
+  <resultMap id="BaseResultMap" type="cn.entity.News">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="pubtime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="uid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="top" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="kindid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, content, pubtime, uid, top, kindid
+  </sql>
+  
+   <select id="getNewsList" resultMap="BaseResultMap">
+    select n.*,u.username as username,k.kindname as kindname 
+    
+    from news n,user u,kind k where n.uid=u.id and n.kindid=k.id and n.top=1
+    <if test="username!=null and username!=''">
+  		and username like '%${username}%'
+  	</if>
+  	<if test="kindid!=null and kindid!=-1">
+  		and kindid = #{kindid,jdbcType=INTEGER}
+  	</if>
+  	<if test="uid!=null and uid!=0">
+  		and uid =#{uid}
+  	</if>
+    order by id desc 
+  </select>
+  <select id="getgonggaolist" resultMap="BaseResultMap">
+    select n.*,u.username as username 
+    
+    from news n,user u where n.uid=u.id 
+    
+    and n.top=2  order by id desc 
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select n.*,u.username as username,k.kindname as kindname 
+    
+    from news n,user u,kind k where n.uid=u.id and n.kindid=k.id 
+    
+    
+    and n.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.entity.News">
+    insert into news (id, title, content, 
+      pubtime, uid, top, 
+      kindid)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{pubtime,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{top,jdbcType=INTEGER}, 
+      #{kindid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.entity.News">
+    insert into news
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="pubtime != null">
+        pubtime,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="top != null">
+        top,
+      </if>
+      <if test="kindid != null">
+        kindid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pubtime != null">
+        #{pubtime,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="top != null">
+        #{top,jdbcType=INTEGER},
+      </if>
+      <if test="kindid != null">
+        #{kindid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.entity.News">
+    update news
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pubtime != null">
+        pubtime = #{pubtime,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="top != null">
+        top = #{top,jdbcType=INTEGER},
+      </if>
+      <if test="kindid != null">
+        kindid = #{kindid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.entity.News">
+    update news
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      pubtime = #{pubtime,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER},
+      top = #{top,jdbcType=INTEGER},
+      kindid = #{kindid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -53,8 +53,8 @@
   	</if>
  	order by id desc
   </select>
-  
-  
+
+
   <select id="login" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

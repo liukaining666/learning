@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Const {
+	//บวบว
 	public static final String ROOT="/learning/";
 	public static final String ADMINROOT="/learning/admin/";
 	public static final String LOGROOT="/learning/login/";

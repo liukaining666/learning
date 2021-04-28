@@ -35,4 +35,6 @@ public interface UserService {
     PageInfo<User> getUserListByUserIds(String userIds,Integer pageNum);
     //通过老师的id找到老师的课程  再找到该课程下的学生
     PageInfo<User> getUserListByTeacherid(@Param("teacherId")Integer teacherId,Integer pageNum);
+    //查询没有选班级的学生
+    List<User> getNoClassesStudents();
 }

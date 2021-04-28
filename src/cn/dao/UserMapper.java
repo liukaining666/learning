@@ -30,4 +30,6 @@ public interface UserMapper {
     List<User> getLoverUserList(@Param("username") String username);
     
     List<User> getUserListByTeacherid(@Param("teacherId")Integer teacherId);
+    
+    List<User> getNoClassesStudents();
 }

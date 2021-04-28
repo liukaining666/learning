@@ -179,8 +179,6 @@ public class TimuController {
                     evo.setAnswer(getCellData(cell5).trim());
                     Cell cell6 = row.getCell(6);
                     evo.setScore(Integer.parseInt(getCellData(cell6).trim()));
-                    Cell cell7 = row.getCell(7);
-                    evo.setOpd(getCellData(cell7).trim());
                     evo.setKindid(kindid);
                     evo.setIsdel(0);
                     System.out.println("存入一个试卷:"+ JSON.toJSONString(evo));

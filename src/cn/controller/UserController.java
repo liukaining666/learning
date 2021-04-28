@@ -59,7 +59,12 @@ public class UserController {
 		model.addAttribute("username", username);
 		return "user";
 	}
-	
+	@RequestMapping("getNoClassesStudents")//查询未选班级的学生
+	@ResponseBody
+    public List<User> getNoClassesStudents() {
+     
+        return userService.getNoClassesStudents();
+    }
 	@RequestMapping("getTeacherDeskStudents")//查询选了当前登陆老师的课程的学生
 	@ResponseBody
     public PageInfo<User> getTeacherDeskStudents(Integer pageNum,

@@ -93,5 +93,9 @@ public class UserServiceImpl implements UserService{
         PageInfo<User> pageInfo=new PageInfo<User>(userlist);
         return pageInfo;
     }
-
+    @Override
+    public List<User> getNoClassesStudents() {
+        List<User> userlist=userMapper.getNoClassesStudents();
+        return userlist;
+    }
 }

@@ -18,8 +18,10 @@ public class User {
     private Integer role;
 
     private String headpic;
+    
+    private Integer classesid;//班级id
 
-    public User(Integer id, String username, String password, String phone, String email, String realname, String address, Integer role, String headpic) {
+    public User(Integer id, String username, String password, String phone, String email, String realname, String address, Integer role, String headpic,Integer classesid) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -29,6 +31,7 @@ public class User {
         this.address = address;
         this.role = role;
         this.headpic = headpic;
+        this.classesid = classesid;
     }
 
     public User() {
@@ -106,4 +109,13 @@ public class User {
     public void setHeadpic(String headpic) {
         this.headpic = headpic == null ? null : headpic.trim();
     }
+
+    public Integer getClassesid() {
+        return classesid;
+    }
+
+    public void setClassesid(Integer classesid) {
+        this.classesid = classesid;
+    }
+    
 }

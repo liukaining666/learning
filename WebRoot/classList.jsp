@@ -25,6 +25,58 @@
     <link rel="stylesheet" href="/learning/js/layui/css/layui.css" media="all">
 </head>
 <body>
+<style>
+    .main{
+        width: 600px;
+        height: 576px;
+        background:url('img/bg.png');
+        margin: 80px auto;
+    }
+    .text{
+        width: 180px;
+        height: 100px;
+        color: #fff;
+        font-weight:bold;
+        font-size: 58px;
+        margin:34px 380px auto;
+        text-align: center;
+        cursor: pointer;
+    }
+    .button{
+        width: 180px;
+        height: 100px;
+        color: #fff;
+        font-weight:bold;
+        font-size: 58px;
+        position: relative;
+        left: 50px;
+        top: 210px;
+        text-align: center;
+        cursor: pointer;
+        /*background: #666;*/
+    }
+    .name{
+        position: relative;
+        /*background: #999;*/
+        left: 140px;
+        top: 120px;
+        width: 280px;
+        height: 100px;
+        color:#9fc;
+        font-weight:bold;
+        font-size: 58px;
+        text-align: center;
+    }
+    .timePos{
+        position: relative;
+        left: 196px;
+        top: 201px;
+        color:#9fc;
+        font-size: 58px;
+        text-align: center;
+        display: inline-block;
+    }
+</style>
 <div id="wrapper">
     <%@include file="/top.jsp" %>
     <!-- /. NAV SIDE  -->
@@ -34,11 +86,11 @@
             <div class="row">
                 <div class="col-sm-6">
                     <h1 class="page-header">
-                        课堂<small>管理</small>
+                        班级<small>管理</small>
                         <a class="waves-effect waves-light btn" data-toggle="modal" data-target="#updateModa2"
-                           onclick="toadduser()">
+                           >
                             <i class="material-icons left">cloud</i>
-                            新增学生</a>
+                            随机点名</a>
                     </h1>
 
                 </div>
@@ -58,50 +110,15 @@
                     </div>
                 </div>
 
-
-                <!--修改 -->
-                <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">修改课程</h4>
-                        </div>
-                        <div>
-                            姓名:<input type="text" id="namePop">
-                            班级:
-                            <select name="a" id="classSele" style="display: block" >
-                            </select>
-                        </div>
-
-                        <div class="modal-footer">
-
-                            <button type="button" onclick="doSave2()" class="btn btn-primary">保存</button>
-
-                        </div>
-                     </div>
-                </div>
-
-
                 <div class="modal fade" id="updateModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                      aria-hidden="true">
 
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">修改课程</h4>
-                        </div>
-                        <div>
-                            姓名:
-                            <select name="a" style="display: block" id="studentName">
-
-                            </select>
-                            班级:
-                            <select name="a" style="display: block" id="className">
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" onclick="doSaveAdd()" class="btn btn-primary">保存</button>
+                        <div class="main">
+                            <div class="button"><span>开始</span></div>
+                            <div class="timePos">计时: <span id="time">10</span></div>
+                            <div class="text">点名</div>
+                            <div class="name"><span id='ko'>苍皇</span></div>
                         </div>
                     </div>
                 </div>
@@ -121,6 +138,7 @@
                 <script src="<%=Const.ROOT %>assets/js/jquery.metisMenu.js"></script>
                 <script src="/learning/js/layui/layui.js"></script>
                 <script src="/learning/js/studentList.js"></script>
+                <script src="/learning/js/jquery-migrate-1.2.1.min.js"></script>
 
 
                         <!-- /. WRAPPER  -->
@@ -158,7 +176,7 @@
                         html += '<td>' + data.list[i].username + '</td>'
                         html += '<td>' + data.list[i].phone + '</td>'
                         html += '<td>' + data.list[i].password + '</td>'
-                        html += "<td><a onclick=showPopData('"+data.list[i].realname+"','"+data.list[i].id+"') class='waves-effect waves-light btn' data-toggle='modal' data-target='#updateModal'>修改</a></td>"
+                        html += "<td><a onclick=showPopData('"+data.list[i].username+"','"+data.list[i].id+"') class='waves-effect waves-light btn' data-toggle='modal' data-target='#updateModal'>修改</a></td>"
                         html += '</tr>'
 
                     }
@@ -166,92 +184,42 @@
                     html += '</table>'
                     $("#tableDiv").html(html)
 
-                    layui.use(['laypage', 'layer'], function () {
-                        var laypage = layui.laypage
-                            , layer = layui.layer;
-
-                        //总页数低于页码总数
-                        laypage.render({
-                            elem: 'demo1',
-                            limit: 5,
-                            curr:data.pageNum
-                            , count: total //数据总数
-                            , jump: function (obj, first) {
-                                if (!first) {
-                                    initData(obj.curr)
-                                }
-                            }
-                        });
-                    })
                 }
             })
 
         }
-        var stuIdPop = ''
-    function showPopData(val,id) {
-        stuIdPop = id;
-        $("#namePop").val(val)
-        var htmlCls = ''
-        $.ajax({
-            url: '/learning/classes/getClassesList',
-            type:'POST',
-            success:function (data) {
-                for (var i=0; i<data.length; i++) {
-                    htmlCls += '<option value="'+data[i].id+'">'+data[i].name+'</option>'
-                }
-                $("#classSele").html(htmlCls)
-            }
-        })
-    }
-    function toadduser() {
-            var htmlStu =''
-            var htmlCls =''
-        $.ajax({
-            url: '/learning/user/getNoClassesStudents',
-            type:'POST',
-            success:function (data) {
-                for (var i=0; i<data.length; i++) {
-                    htmlStu += '<option value="'+data[i].id+'">'+data[i].realname+'</option>'
-                }
-                $("#studentName").html(htmlStu)
-            }
-        })
-        $.ajax({
-            url: '/learning/classes/getClassesList',
-            type:'POST',
-            success:function (data) {
-                for (var i=0; i<data.length; i++) {
-                    htmlCls += '<option value="'+data[i].id+'">'+data[i].name+'</option>'
-                }
-                $("#className").html(htmlCls)
-            }
-        })
-    }
-    function doSaveAdd() {
-        var stuID = $("#studentName option:selected").val()
-        var clsId = $("#className option:selected").val()
-        $.ajax({
-            url: '/learning/user/updateStudentById',
-            type:'POST',
-            data:{"id":stuID,"classesid":clsId},
-            success:function (data) {
-                alert("保存成功")
-            }
-        })
-    }
+        var names=['叶伏天','花谢语','叶无尘','叶百川','顾东流','刑开','丫丫','余生','夏青鸾','楼兰雪','白陆离','华青青','诸葛明月','龙倚天','萧沐鱼','皇九哥','花风流','齐玄罡','雪夜','萧笙','周知命','盖穹','盖苍','帝乌','神昊'];
+        var ydm;
+        var index;
+        var val;
+        var timeJs
+        var innerHTML
+        $('.button').click(
+            function(){
+                //alert(names.length);
+                $(this).css({'color':'#f00'}).html('停止');
+                var this_ = $(this)
+                innerHTML = parseInt($("#time")[0].innerHTML);
+                ydm=setInterval(function(){
+                    index=Math.floor(Math.random()*names.length);
+                    val=names[index];
+                    $('#ko').css({'color':'#9fc'}).html(val);
+                },50)
+               timeJs = setInterval(function () {
+                    innerHTML--;
+                    $("#time").html(innerHTML)
+                    if (innerHTML == 0) {
+                        clearInterval(timeJs)
+                        clearInterval(ydm)
+                        this_.css({'color':'#f00'}).html('结束');
+                    }
+                },1000)
+            },
 
 
-    function doSave2() {
-        var clsId = $("#classSele option:selected").val()
-        $.ajax({
-            url: '/learning/user/updateStudentById',
-            type:'POST',
-            data:{"id":stuIdPop,"classesid":clsId},
-            success:function (data) {
-                alert("保存成功")
-                location.reload()
-            }
-        })
-    }
+            /*$(this).css({'color':'#fff'}).html('开始');
+        $('#ko').css({'color':'#f00'});
+        clearInterval(ydm);*/
+        );
 </script>
 </html>

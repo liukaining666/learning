@@ -277,7 +277,7 @@
                             class="fa fa-bar-chart-o"></i> 课程管理</a>
                 </li>
                 <li style="height: 42px">
-                    <a href="<%=Const.ROOT%>kind/getKindlist" class="waves-effect waves-dark"><i
+                    <a href="/learning/classList.jsp" class="waves-effect waves-dark"><i
                             class="fa fa-bar-chart-o"></i> 班级管理</a>
                 </li>
                 <li style="height: 42px">

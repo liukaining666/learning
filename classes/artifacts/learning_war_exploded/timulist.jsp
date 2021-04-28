@@ -41,12 +41,17 @@
                                onclick="toadduser()">
                                 <i class="material-icons left">cloud</i>
                                 新增试题</a>
-							<a class="waves-effect waves-light btn" data-toggle="modal" data-target="#myModal"
-							   onclick="toadduser()">
-								<i class="material-icons left">cloud</i>
-								上传试卷</a>
+                            <a class="waves-effect waves-light btn" data-toggle="modal" data-target="#myModalUpload"
+                               onclick="toadduserUpload()">
+                                <i class="material-icons left">cloud</i>
+                                上传试卷
+                            </a>
+                            <a class="waves-effect waves-light btn"
+                               href="/learning/file/试题模板.xlsx" download="试题模板.xlsx">
+                                <i class="material-icons left">cloud</i>
+                                试卷模板下载
+                            </a>
                             <!-- 按钮触发模态框 -->
-
 
                         </h1>
                     </div>
@@ -93,48 +98,89 @@
                                 <tr class="info">
                                     <td>${count.count }</td>
                                     <td>${item.title }</td>
-
                                     <td>${item.score }</td>
-
-
                                     <td>
-
-
                                         <a class="waves-effect waves-light btn" data-toggle="modal"
                                            data-target="#updateModal" onclick="toupdate('${item.id}')">
                                             修改</a>
-
                                         <a class="waves-effect waves-light btn" data-toggle="modal"
                                            data-target="#deleteModal" onclick="todelete('${item.id}')">
                                             删除</a>
                                     </td>
-
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
-
-
                     </div>
                 </div>
             </div>
             <!--  end  Context Classes  -->
         </div>
 
+        <%--上传试卷--%>
+        <div class="modal fade" id="myModalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">新增试题</h4>
+                </div>
+                <!-- 新增 -->
+                <div class="row" id="addmodal" style="display: none">
+                    <div class="col-lg-12">
+
+                        <div class="card-content">
+                            <form class="col s12" action="<%=Const.ROOT%>timu/addTimu" method="post"
+                                  enctype="multipart/form-data">
+                                <input type="hidden" id="isdel" name="isdel" value="0">
+
+                                <div class="row">
+
+                                    <div class="input-field col s6">
+
+                                        <select class="form-control" id="kindidVal" name="kindid">
+                                            <option value="">--请选择试题课程--</option>
+                                            <c:forEach items="${kindList}" var="item" varStatus="count">
+                                                <option value="${item.id }">${item.kindname }</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                                选择文件<input type="file" id="fileUpload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                                <span style="color: red">*(请上传Excel模板文件)</span>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="doSave()" class="btn btn-primary">保存</button>
+                                </div>
+
+
+                            </form>
+
+
+                            <!-- 模态框结尾 -->
+                            <div class="switch">
+                                <label>
+                                </label>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
+
+
+            </div>
+        </div>
 
         <!-- 模态框（Modal） -->
-
-
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
 
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">新增试题</h4>
+                    <h4 class="modal-title">新增试题</h4>
                 </div>
                 <!-- 新增 -->
-                <div class="row" id="addmodal" style="display: none">
+                <div class="row" id="addmodal2" style="display: none">
                     <div class="col-lg-12">
 
                         <div class="card-content">
@@ -158,7 +204,7 @@
                                     <div class="input-field col s12">
                                         <textarea id="title" name="title" required=""
                                                   class="materialize-textarea"></textarea>
-                                        <label for="textarea1">题干</label>
+                                        <label>题干</label>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -391,9 +437,6 @@
 
         <!-- Metis Menu Js -->
         <script src="<%=Const.ROOT %>assets/js/jquery.metisMenu.js"></script>
-        <!-- Custom Js -->
-        <script src="<%=Const.ROOT %>assets/js/custom-scripts.js"></script>
-
 
 </body>
 <script type="text/javascript">
@@ -407,8 +450,16 @@
     }
 
     function toadduser() {
+        $("#addmodal2").show();
+    }
+
+    //上传试卷
+    function toadduserUpload() {
+        $("#fileUpload").val("")
         $("#addmodal").show();
     }
+
+
 
     function todelete(id) {
         $("#deletemodal #id").val(id);
@@ -433,6 +484,31 @@
         });
     }
 
+    function doSave() {
+        if ($("#kindidVal option:selected").val() == '') {
+            alert("请选择课程")
+            return
+        }
+        if ($("#fileUpload").val() == '') {
+            alert("请选择上传的Excel文件")
+            return
+        }
+        var formData = new FormData();
+        var selectVal = $("#kindidVal option:selected").val();
+        var file = $("#fileUpload")[0].files[0];
+        formData.append("cmFile",file)
+        formData.append("kindid",selectVal)
+        $.ajax({
+            url: '/learning/timu/importTimu',
+            type: 'POST',
+            data:formData,
+            contentType:false,
+            processData:false,
+            success: function (data) {
+                location.reload();
+            }
+        })
+    }
 
 </script>
 

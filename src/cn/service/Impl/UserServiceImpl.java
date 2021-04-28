@@ -98,4 +98,10 @@ public class UserServiceImpl implements UserService{
         List<User> userlist=userMapper.getNoClassesStudents();
         return userlist;
     }
+
+    @Override
+    public void updateStudentById(User user) {
+        // TODO Auto-generated method stub
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

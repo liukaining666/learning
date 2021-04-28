@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dao.ClassesMapper">
+  <resultMap id="BaseResultMap" type="cn.entity.Classes">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="msg" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, msg
+  </sql>
+  
+  <select id="getClassesList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classes
+   order by id desc
+  </select>
+</mapper>

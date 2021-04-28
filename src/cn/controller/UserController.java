@@ -21,11 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 
+import cn.entity.Classes;
 import cn.entity.Kind;
 import cn.entity.Message;
 import cn.entity.News;
 import cn.entity.Record;
 import cn.entity.User;
+import cn.service.ClassesService;
 import cn.service.KindService;
 import cn.service.MessageService;
 import cn.service.NewsService;
@@ -46,7 +48,8 @@ public class UserController {
 	private NewsService newsService;
 	@Autowired
     private KindService kindService;
-	
+	@Autowired
+	private ClassesService classesService;
 	@RequestMapping("getUserlist")//查询学生
 	public String getUserlist(String username, Integer pageNum,
 			Model model) {
@@ -82,6 +85,13 @@ public class UserController {
         Integer teacherId = user.getId();
         //Integer teacherId = teacherId = 4;
         PageInfo<User> pageInfo = userService.getUserListByTeacherid(teacherId,pageNum);
+        List<User> list = pageInfo.getList();
+        for (User user2 : list) {
+            Classes classesById = classesService.getClassesById(user2.getClassesid());
+            if(null!= classesById) {
+                user2.setPassword(classesById.getName());
+            }
+        }
         return pageInfo;
     }
 	@RequestMapping("getTeacherlist")//查询老师

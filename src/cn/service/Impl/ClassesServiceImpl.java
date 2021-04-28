@@ -23,4 +23,10 @@ public class ClassesServiceImpl implements ClassesService{
 	public List<Classes> getClassesList(){
 	    return classesMapper.getClassesList();
 	}
+
+    @Override
+    public Classes getClassesById(Integer id) {
+        // TODO Auto-generated method stub
+        return classesMapper.getClassesById(id);
+    }
 }

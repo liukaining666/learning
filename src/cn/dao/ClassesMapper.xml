@@ -18,4 +18,10 @@
     from classes
    order by id desc
   </select>
+  <select id="getClassesById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classes
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 </mapper>

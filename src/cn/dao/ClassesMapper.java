@@ -6,4 +6,5 @@ import cn.entity.Classes;
 
 public interface ClassesMapper {
     List<Classes> getClassesList();
+    Classes getClassesById(Integer id);
 }

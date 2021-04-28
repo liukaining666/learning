@@ -37,4 +37,6 @@ public interface UserService {
     PageInfo<User> getUserListByTeacherid(@Param("teacherId")Integer teacherId,Integer pageNum);
     //查询没有选班级的学生
     List<User> getNoClassesStudents();
+    //修改学生班级
+    void updateStudentById(User user);
 }

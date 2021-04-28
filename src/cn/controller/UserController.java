@@ -65,6 +65,11 @@ public class UserController {
      
         return userService.getNoClassesStudents();
     }
+	@RequestMapping("updateStudentById")//查询未选班级的学生
+    @ResponseBody
+    public void updateStudentById(User user) {
+         userService.updateStudentById(user);
+    }
 	@RequestMapping("getTeacherDeskStudents")//查询选了当前登陆老师的课程的学生
 	@ResponseBody
     public PageInfo<User> getTeacherDeskStudents(Integer pageNum,

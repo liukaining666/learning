@@ -123,7 +123,7 @@ public class TimuController {
 	}
 	@RequestMapping("importTimu")
 	@ResponseBody
-    public Map<String,Object> importTimu(@RequestParam("cmFile") CommonsMultipartFile cmFile, HttpServletResponse response,HttpServletRequest request){//导入试题
+    public Map<String,Object> importTimu(@RequestParam("cmFile") CommonsMultipartFile cmFile, HttpServletResponse response,HttpServletRequest request,Integer kindid){//导入试题
         
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -181,8 +181,7 @@ public class TimuController {
                     evo.setScore(Integer.parseInt(getCellData(cell6).trim()));
                     Cell cell7 = row.getCell(7);
                     evo.setOpd(getCellData(cell7).trim());
-                    Cell cell8 = row.getCell(8);
-                    evo.setKindid(Integer.parseInt(getCellData(cell8).trim()));
+                    evo.setKindid(kindid);
                     evo.setIsdel(0);
                     System.out.println("存入一个试卷:"+ JSON.toJSONString(evo));
                     try {

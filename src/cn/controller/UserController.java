@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,14 +83,20 @@ public class UserController {
         }
         //获取当前登陆的老师的id
         User user = (User) session.getAttribute("userSession");
-        Integer teacherId = user.getId();
-        //Integer teacherId = teacherId = 4;
+        //Integer teacherId = user.getId();
+        Integer teacherId = teacherId = 4;
         PageInfo<User> pageInfo = userService.getUserListByTeacherid(teacherId,pageNum);
         List<User> list = pageInfo.getList();
         for (User user2 : list) {
-            Classes classesById = classesService.getClassesById(user2.getClassesid());
-            if(null!= classesById) {
-                user2.setPassword(classesById.getName());
+            if(!StringUtils.isEmpty(user2.getClassesid())) {
+                Classes classesById = classesService.getClassesById(user2.getClassesid());
+                if(null!= classesById) {
+                    user2.setPassword(classesById.getName());
+                }else {
+                    user2.setPassword("");
+                }
+            }else {
+                user2.setPassword("");
             }
         }
         return pageInfo;

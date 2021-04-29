@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dao.SumscoreMapper">
+  <resultMap id="BaseResultMap" type="cn.entity.Sumscore">
+    <constructor>
+      <arg column="trueNum" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="falseNum" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  
+  <select id="sumScore" resultMap="BaseResultMap">
+   SELECT
+    sum(
+    IF
+    ( g.answer = g.daan , 1, 0 )) AS trueNum,
+    sum(
+    IF
+    ( g.answer != g.daan  , 1, 0 )) AS falseNum 
+FROM
+    (
+    SELECT
+        t.title,
+        u.realname,
+        t.answer,
+        k.daan 
+    FROM
+        kaoshi k,
+        score s,
+        timu t,
+        USER u 
+    WHERE
+        k.sid = s.id 
+        AND k.tid = t.id 
+    AND u.id = s.uid 
+    ) g;
+  </select>
+</mapper>

@@ -22,16 +22,35 @@
                      src="<%=Const.ROOT%>headpic/${sessionScope.userSession.headpic }"/></li>
         </c:if>
 
-        <li><a class="dropdown-button waves-effect" href="#!" data-activates="dropdown1"><i
+        <li onclick="shouPop()"><a class="dropdown-button waves-effect" href="#!" data-activates="dropdown1"><i
                 class="fa fa-user fa-fw"></i> <b>${sessionScope.userSession.username }</b> <i
                 class="material-icons right">arrow_drop_down</i></a></li>
 
     </ul>
 </nav>
 <!-- 用户模块 -->
-
-
-<ul id="dropdown1" class="dropdown-content">
+<script>
+    function shouPop() {
+        $(".popUl").css({"display":"block"})
+    }
+</script>
+<style>
+    .popUl{
+        width: 144px;
+        position: fixed;
+        display: block;
+        opacity: 1;
+        right: 0px;
+        margin-top: 60px;
+        background: #fff;
+        z-index: 999;
+        display: none;
+    }
+    .popUl li {
+        padding: 10px 5px;
+    }
+</style>
+<ul class="popUl">
     <c:if test="${sessionScope.userSession!=null }">
 
         </li>

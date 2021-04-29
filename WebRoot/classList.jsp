@@ -38,7 +38,7 @@
         color: #fff;
         font-weight:bold;
         font-size: 58px;
-        margin:34px 380px auto;
+        margin:100px 380px auto;
         text-align: center;
         cursor: pointer;
     }
@@ -67,15 +67,7 @@
         font-size: 58px;
         text-align: center;
     }
-    .timePos{
-        position: relative;
-        left: 196px;
-        top: 201px;
-        color:#9fc;
-        font-size: 58px;
-        text-align: center;
-        display: inline-block;
-    }
+
 </style>
 <div id="wrapper">
     <%@include file="/top.jsp" %>
@@ -91,6 +83,10 @@
                            >
                             <i class="material-icons left">cloud</i>
                             随机点名</a>
+                        <a class="waves-effect waves-light btn" data-toggle="modal" data-target="#updateModa3"
+                        >
+                            <i class="material-icons left">cloud</i>
+                            添加学生</a>
                     </h1>
 
                 </div>
@@ -112,17 +108,34 @@
 
                 <div class="modal fade" id="updateModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                      aria-hidden="true">
-
                     <div class="modal-content">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <div class="main">
                             <div class="button"><span>开始</span></div>
-                            <div class="timePos">计时: <span id="time">10</span></div>
                             <div class="text">点名</div>
-                            <div class="name"><span id='ko'>苍皇</span></div>
+                            <div class="name"><span id='ko'></span></div>
                         </div>
                     </div>
                 </div>
 
+
+                <div class="modal fade" id="updateModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-content">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div >
+                            <input type="text" placeholder="输入学生姓名" id="nameStu">
+                            <input type="text" placeholder="年龄" id="ageStu">
+                            性别<select name="" id="sexStu" style="display: block">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="addStu()" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- /. WRAPPER  -->
                 <!-- JS Scripts-->
@@ -161,65 +174,71 @@
 
         initData(1)
         var total = 0;
+        var listName = []
         function initData(val) {
             var html = "<table class='table'>";
-            html += '<tr><th>#</th><th>学生姓名</th><th>手机号</th><th>班级</th><th>编辑</th></tr>'
+            html += '<tr><th>#</th><th>学生姓名</th><th>性别</th><th>年龄</th></tr>'
             $.ajax({
-                url: '/learning/user/getTeacherDeskStudents',
+                url: '/learning/student/getStudentList',
                 type: 'POST',
                 data: {"pageNum": val},
                 success: function (data) {
-                    total = data.total;
-                    for (var i = 0; i < data.list.length; i++) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#ko").html(data[0].name)
+                        listName.push(data[i].name)
                         html += '<tr>'
                         html += '<td>' + i + 1 + '</td>'
-                        html += '<td>' + data.list[i].username + '</td>'
-                        html += '<td>' + data.list[i].phone + '</td>'
-                        html += '<td>' + data.list[i].password + '</td>'
-                        html += "<td><a onclick=showPopData('"+data.list[i].username+"','"+data.list[i].id+"') class='waves-effect waves-light btn' data-toggle='modal' data-target='#updateModal'>修改</a></td>"
+                        html += '<td>' + data[i].name + '</td>'
+                        html += '<td>' + data[i].sex + '</td>'
+                        html += '<td>' + data[i].age + '</td>'
                         html += '</tr>'
-
                     }
-
                     html += '</table>'
                     $("#tableDiv").html(html)
-
                 }
             })
 
         }
-        var names=['叶伏天','花谢语','叶无尘','叶百川','顾东流','刑开','丫丫','余生','夏青鸾','楼兰雪','白陆离','华青青','诸葛明月','龙倚天','萧沐鱼','皇九哥','花风流','齐玄罡','雪夜','萧笙','周知命','盖穹','盖苍','帝乌','神昊'];
+       // var names=['叶伏天','花谢语','叶无尘','叶百川','顾东流','刑开','丫丫','余生','夏青鸾','楼兰雪','白陆离','华青青','诸葛明月','龙倚天','萧沐鱼','皇九哥','花风流','齐玄罡','雪夜','萧笙','周知命','盖穹','盖苍','帝乌','神昊'];
+        var names = listName;
         var ydm;
         var index;
         var val;
-        var timeJs
-        var innerHTML
+        var flag =1;
         $('.button').click(
             function(){
-                //alert(names.length);
-                $(this).css({'color':'#f00'}).html('停止');
-                var this_ = $(this)
-                innerHTML = parseInt($("#time")[0].innerHTML);
-                ydm=setInterval(function(){
-                    index=Math.floor(Math.random()*names.length);
-                    val=names[index];
-                    $('#ko').css({'color':'#9fc'}).html(val);
-                },50)
-               timeJs = setInterval(function () {
-                    innerHTML--;
-                    $("#time").html(innerHTML)
-                    if (innerHTML == 0) {
-                        clearInterval(timeJs)
-                        clearInterval(ydm)
-                        this_.css({'color':'#f00'}).html('结束');
-                    }
-                },1000)
-            },
+                if (flag == 1) {
+                    $(this).css({'color':'#f00'}).html('停止');
+                    ydm=setInterval(function(){
+                        index=Math.floor(Math.random()*names.length);
+                        val=names[index];
+                        $('#ko').css({'color':'#9fc'}).html(val);
+                        flag = 2
+                    },50)
+                }else {
+                    $(this).css({'color':'#f00'}).html('开始');
+                    clearInterval(ydm)
+                    flag = 1
+                }
 
-
-            /*$(this).css({'color':'#fff'}).html('开始');
-        $('#ko').css({'color':'#f00'});
-        clearInterval(ydm);*/
+            }
         );
+
+
+
+        function addStu() {
+            var name = $("#nameStu").val();
+            var sex = $("#sexStu option:selected").val();
+            var age = $("#ageStu ").val();
+            $.ajax({
+                url: '/learning/student/addStudent',
+                type: 'POST',
+                data: {"name":name,"age":age,"sex":sex},
+                success: function (data) {
+                    alert("新加成功")
+                    location.reload()
+                }
+            })
+        }
 </script>
 </html>

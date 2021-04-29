@@ -84,7 +84,9 @@
                </form>
             </div>
          
-          
+            <div>
+                <h2>剩余时间: <span id="time">10</span></h2>
+            </div>
 			 <!-- /. PAGE INNER  -->
             </div>
         </div>
@@ -110,6 +112,16 @@
 function tolook(id){
 	 location.href="${pageContext.request.contextPath }/news/lookNews/"+id;
 }
+var number = parseInt($("#time")[0].innerText);
+setInterval(function () {
+    number--;
+    if (number < 0) {
+        $(".btn").attr("disabled","disabled")
+        return false
+    }
+    $("#time").html(number)
+
+},1000)
 function check(){
 	var daans="";
 	if($("#kform input[type='radio']:checked").length!=${count}){

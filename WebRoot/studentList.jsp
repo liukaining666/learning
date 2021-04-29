@@ -135,7 +135,9 @@
 
                         <!-- Metis Menu Js -->
                         <script src="<%=Const.ROOT %>assets/js/jquery.metisMenu.js"></script>
-                        <script src="/learning/js/layui/layui.js"></script>
+                <!-- Custom Js -->
+                <script src="<%=Const.ROOT %>assets/js/custom-scripts.js"></script>
+                <script src="/learning/js/layui/layui.js"></script>
                         <script src="/learning/js/studentList.js"></script>
 
 </body>
